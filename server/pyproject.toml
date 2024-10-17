@@ -1,0 +1,4 @@
+[project]
+name = "dataloader"
+version = "0.1"
+dependencies = ["fastapi[standard]", "uvicorn"]
