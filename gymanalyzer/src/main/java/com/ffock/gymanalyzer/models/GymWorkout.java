@@ -1,5 +1,7 @@
 package com.ffock.gymanalyzer.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ffock.gymanalyzer.models.enums.SeriesType;
 
 import jakarta.persistence.CascadeType;
@@ -24,6 +26,7 @@ public class GymWorkout {
 
     @Column(name = "series_type")
     @Enumerated(EnumType.STRING)
+    @JsonProperty("seriesType")
     private SeriesType seriesType;
 
     private int volume;
@@ -35,6 +38,7 @@ public class GymWorkout {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "day_date", nullable = false, referencedColumnName = "day_date")
+    @JsonBackReference
     private Day day;
 
     public GymWorkout() {
