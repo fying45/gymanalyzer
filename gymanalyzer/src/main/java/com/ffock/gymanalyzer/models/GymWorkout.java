@@ -1,7 +1,18 @@
 package com.ffock.gymanalyzer.models;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import com.ffock.gymanalyzer.models.enums.SeriesType;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "gym_workout")
@@ -11,82 +22,30 @@ public class GymWorkout {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    private String seriesType;
+    @Column(name = "series_type")
+    @Enumerated(EnumType.STRING)
+    private SeriesType seriesType;
 
-    @NotNull
-    private Integer series;
+    private int volume;
+    private double weight;
 
-    @NotNull
-    private Integer volume;
-
-    @NotNull
-    private Integer weight;
-
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "exercise_id", nullable = false, foreignKey = @ForeignKey(name = "fk_exercise_id"))
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "exercise_id", nullable = false)
     private Exercise exercise;
 
-    @NotNull
-    @Column(name = "day_date")
-    private java.sql.Date dayDate;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "day_date", nullable = false, referencedColumnName = "day_date")
+    private Day day;
 
-    // Getters et Setters
-    public Long getId() {
-        return id;
+    public GymWorkout() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getSeriesType() {
-        return seriesType;
-    }
-
-    public void setSeriesType(String seriesType) {
+    public GymWorkout(SeriesType seriesType, int volume, double weight, Exercise exercise, Day day) {
         this.seriesType = seriesType;
-    }
-
-    public Integer getSeries() {
-        return series;
-    }
-
-    public void setSeries(Integer series) {
-        this.series = series;
-    }
-
-    public Integer getVolume() {
-        return volume;
-    }
-
-    public void setVolume(Integer volume) {
         this.volume = volume;
-    }
-
-    public Integer getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Integer weight) {
         this.weight = weight;
-    }
-
-    public Exercise getExercise() {
-        return exercise;
-    }
-
-    public void setExercise(Exercise exercise) {
         this.exercise = exercise;
+        this.day = day;
     }
 
-    public java.sql.Date getDayDate() {
-        return dayDate;
-    }
-
-    public void setDayDate(java.sql.Date dayDate) {
-        this.dayDate = dayDate;
-    }
 }
-

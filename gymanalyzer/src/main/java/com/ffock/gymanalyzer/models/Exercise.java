@@ -1,7 +1,17 @@
 package com.ffock.gymanalyzer.models;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import java.util.List;
+
+import com.ffock.gymanalyzer.models.enums.ExerciceArea;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "exercise")
@@ -11,58 +21,25 @@ public class Exercise {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @ElementCollection
-    @CollectionTable(name = "exercise_primary_muscle_group", joinColumns = @JoinColumn(name = "exercise_id"))
-    private String[] primaryMuscleGroup;
+    @Column(name = "primary_muscle_group")
+    private List<String> primaryMuscleGroup;
 
-    @ElementCollection
-    @CollectionTable(name = "exercise_secondary_muscle_group", joinColumns = @JoinColumn(name = "exercise_id"))
-    private String[] secondaryMuscleGroup;
+    @Column(name = "secondary_muscle_group")
+    private List<String> secondaryMuscleGroup;
 
-    @NotNull
-    private String area;
+    @Column(name = "area", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ExerciceArea area;
 
-    // Getters et Setters
-    public Long getId() {
-        return id;
+    public Exercise() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public Exercise(String name, ExerciceArea area) {
         this.name = name;
-    }
-
-    public String[] getPrimaryMuscleGroup() {
-        return primaryMuscleGroup;
-    }
-
-    public void setPrimaryMuscleGroup(String[] primaryMuscleGroup) {
-        this.primaryMuscleGroup = primaryMuscleGroup;
-    }
-
-    public String[] getSecondaryMuscleGroup() {
-        return secondaryMuscleGroup;
-    }
-
-    public void setSecondaryMuscleGroup(String[] secondaryMuscleGroup) {
-        this.secondaryMuscleGroup = secondaryMuscleGroup;
-    }
-
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
         this.area = area;
     }
+
 }

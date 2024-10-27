@@ -1,7 +1,13 @@
 package com.ffock.gymanalyzer.models;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "day")
@@ -9,73 +15,30 @@ public class Day {
 
     @Id
     @Column(name = "day_date")
-    private java.sql.Date dayDate;
+    private LocalDate dayDate;
 
+    @Column(name = "sleeping_time")
     private Integer sleepingTime;
-    private Double weight;
-    private Integer activeCaloric;
-    private Double vo2Max;
+
+    private Float weight;
+
+    @Column(name = "active_calories")
+    private Integer activeCalores;
+
+    @Column(name = "vo_2_max")
+    private Float vo2Max;
+
+    @Column(name = "swimming_distance")
     private Integer swimmingDistance;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "week_id", nullable = false, foreignKey = @ForeignKey(name = "fk_week_id"))
-    private Week week;
+    @OneToMany(targetEntity = GymWorkout.class, mappedBy = "day")
+    private List<GymWorkout> workouts;
 
-    // Getters et Setters
-    public java.sql.Date getDayDate() {
-        return dayDate;
+    public Day() {
     }
 
-    public void setDayDate(java.sql.Date dayDate) {
+    public Day(LocalDate dayDate) {
         this.dayDate = dayDate;
     }
 
-    public Integer getSleepingTime() {
-        return sleepingTime;
-    }
-
-    public void setSleepingTime(Integer sleepingTime) {
-        this.sleepingTime = sleepingTime;
-    }
-
-    public Double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Double weight) {
-        this.weight = weight;
-    }
-
-    public Integer getActiveCaloric() {
-        return activeCaloric;
-    }
-
-    public void setActiveCaloric(Integer activeCaloric) {
-        this.activeCaloric = activeCaloric;
-    }
-
-    public Double getVo2Max() {
-        return vo2Max;
-    }
-
-    public void setVo2Max(Double vo2Max) {
-        this.vo2Max = vo2Max;
-    }
-
-    public Integer getSwimmingDistance() {
-        return swimmingDistance;
-    }
-
-    public void setSwimmingDistance(Integer swimmingDistance) {
-        this.swimmingDistance = swimmingDistance;
-    }
-
-    public Week getWeek() {
-        return week;
-    }
-
-    public void setWeek(Week week) {
-        this.week = week;
-    }
 }
