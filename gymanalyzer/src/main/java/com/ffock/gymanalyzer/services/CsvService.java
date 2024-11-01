@@ -1,5 +1,6 @@
 package com.ffock.gymanalyzer.services;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -35,8 +36,8 @@ public class CsvService {
     }
 
     @Transactional
-    public Integer importCSV(String filePath) throws IOException, CsvException {
-        GymBookLogsFile gymBookLogs = gymBookLogsFileReader.read(filePath);
+    public Integer importCSV(BufferedReader reader) throws IOException, CsvException {
+        GymBookLogsFile gymBookLogs = gymBookLogsFileReader.read(reader);
 
         List<GymWorkout> gymWorkouts = gymBookLogs.getGymWorkouts(
                 this::dayProvider,

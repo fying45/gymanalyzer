@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type UseFetchDataOptions = RequestInit & {
   queryParameters?: {
@@ -10,6 +10,7 @@ type UseFetchDataReturnType<TData> = {
   data?: TData;
   loading: boolean;
   errors: Error[];
+  refetch: () => void;
 };
 
 export const useFetchData = <TData>(url: string, options?: UseFetchDataOptions): UseFetchDataReturnType<TData> => {
@@ -17,18 +18,22 @@ export const useFetchData = <TData>(url: string, options?: UseFetchDataOptions):
   const [loading, setLoading] = useState<boolean>(true);
   const [errors, setErrors] = useState<Error[]>([]);
 
-  if (options?.queryParameters) {
-    const params = new URLSearchParams();
+  const prepareUrl = useCallback(() => {
+    if (!options?.queryParameters) {
+      return url;
+    }
+    const params = new URLSearchParams(options.queryParameters).toString();
+    return `${url}?${params}`;
+  }, [url, options?.queryParameters]);
 
-    Object.entries(options.queryParameters).forEach(([key, value]) => {
-      params.append(key, value);
-    });
-
-    url = url.concat("?", params.toString());
-    console.log(url);
-  }
+  const refetch = useCallback(() => {
+    setLoading(true);
+    setErrors([]);
+  }, []);
 
   useEffect(() => {
+    const url = prepareUrl();
+
     fetch(url, options)
       .then((response) => {
         if (response.status === 200) {
@@ -44,11 +49,12 @@ export const useFetchData = <TData>(url: string, options?: UseFetchDataOptions):
         }
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [prepareUrl, options, loading]);
 
   return {
     data,
     loading,
     errors,
+    refetch,
   };
 };

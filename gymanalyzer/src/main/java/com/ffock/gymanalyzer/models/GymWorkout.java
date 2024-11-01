@@ -52,4 +52,8 @@ public class GymWorkout {
         this.day = day;
     }
 
+    public Double computeVolume() {
+        return weight * volume;
+    }
+
 }

@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "day")
-public class Day {
+public class Day implements Comparable<Day> {
 
     @Id
     @Column(name = "day_date")
@@ -45,6 +45,24 @@ public class Day {
 
     public Day(LocalDate dayDate) {
         this.dayDate = dayDate;
+    }
+
+    public LocalDate getDayDate() {
+        return this.dayDate;
+    }
+
+    public Double computeVolume() {
+        if (workouts == null) {
+            return 0.0;
+        }
+        return workouts.stream()
+                .map(GymWorkout::computeVolume)
+                .reduce(0.0, Double::sum);
+    }
+
+    @Override
+    public int compareTo(Day otherDay) {
+        return dayDate.compareTo(otherDay.dayDate);
     }
 
 }

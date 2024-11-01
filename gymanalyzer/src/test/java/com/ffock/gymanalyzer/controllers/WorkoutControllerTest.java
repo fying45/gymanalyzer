@@ -22,6 +22,7 @@ import com.ffock.gymanalyzer.TestcontainersConfiguration;
 import com.ffock.gymanalyzer.models.Day;
 import com.ffock.gymanalyzer.models.Exercise;
 import com.ffock.gymanalyzer.models.GymWorkout;
+import com.ffock.gymanalyzer.models.Week;
 import com.ffock.gymanalyzer.models.enums.ExerciceArea;
 import com.ffock.gymanalyzer.models.enums.SeriesType;
 import com.ffock.gymanalyzer.repositories.DayRepository;
@@ -61,7 +62,7 @@ public class WorkoutControllerTest {
         Exercise tricepsExtensionExercises = new Exercise("Triceps Extensions", ExerciceArea.ARMS);
 
         Day pushDay = new Day(LocalDate.of(2024, 10, 1));
-        Day pullDay = new Day(LocalDate.of(2024, 10, 4));
+        Day pullDay = new Day(LocalDate.of(2024, 10, 10));
 
         List<GymWorkout> workouts = List.of(
                 new GymWorkout(SeriesType.REPS, 10, 20, curlBicepsExercise, pushDay),
@@ -81,6 +82,21 @@ public class WorkoutControllerTest {
         String content = mvcResult.getResponse().getContentAsString();
 
         List<Day> result = objectMapper.readValue(content, new TypeReference<>() {
+        });
+
+        assertThat(result).hasSize(2);
+    }
+
+    @Test
+    void shouldFindAllKnownWeeks() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/api/weeks"))
+                .andExpect(status().isOk())
+                .andReturn();
+        String content = mvcResult.getResponse().getContentAsString();
+
+        System.out.println(content);
+
+        List<Week> result = objectMapper.readValue(content, new TypeReference<>() {
         });
 
         assertThat(result).hasSize(2);

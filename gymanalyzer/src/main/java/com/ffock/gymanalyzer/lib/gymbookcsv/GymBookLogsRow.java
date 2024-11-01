@@ -60,6 +60,11 @@ public class GymBookLogsRow {
         Exercise exercise = exerciceProvider.apply(exercice, area);
 
         SeriesType seriesType = SeriesType.evaluateSeriesType(repetitionsOuTemps);
+
+        if (sautee.trim().toLowerCase().contains("oui")) {
+            return new GymWorkout(seriesType, 0, 0, exercise, trainingDay);
+        }
+
         int volume = parseVolume();
         double weight = parseWeight();
 
