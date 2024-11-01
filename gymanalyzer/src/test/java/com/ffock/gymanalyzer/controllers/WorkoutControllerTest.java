@@ -100,6 +100,7 @@ public class WorkoutControllerTest {
         });
 
         assertThat(result).hasSize(2);
+        assertThat(result.getFirst()).isLessThan(result.getLast());
     }
 
 }

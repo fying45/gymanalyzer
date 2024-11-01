@@ -2,12 +2,14 @@ package com.ffock.gymanalyzer.services;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.ffock.gymanalyzer.models.Day;
 import com.ffock.gymanalyzer.models.Week;
+import com.ffock.gymanalyzer.models.enums.OrderByEnum;
 import com.ffock.gymanalyzer.repositories.DayRepository;
 
 @Service
@@ -19,7 +21,7 @@ public class WeekService {
         this.dayRepository = dayRepository;
     }
 
-    public List<Week> getAllWeeks() {
+    public List<Week> getAllWeeks(OrderByEnum orderBy) {
         List<Week> weeks = new ArrayList<>();
         LocalDate startDate = dayRepository.findOldestDate().orElse(LocalDate.now());
         LocalDate latestDate = dayRepository.findLatestDate().orElse(LocalDate.now());
@@ -33,6 +35,12 @@ public class WeekService {
             weeks.add(new Week(days));
 
             startDate = startDate.plusWeeks(1);
+        }
+
+        if (orderBy == OrderByEnum.ASC) {
+            Collections.sort(weeks);
+        } else {
+            Collections.reverse(weeks);
         }
 
         return weeks;

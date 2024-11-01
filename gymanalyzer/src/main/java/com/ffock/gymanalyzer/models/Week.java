@@ -8,7 +8,7 @@ import java.util.TreeSet;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Week {
+public class Week implements Comparable<Week> {
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -32,5 +32,10 @@ public class Week {
         LocalDate endDate = days.last().getDayDate();
 
         return startDate.format(DATE_FORMATTER) + "-" + endDate.format(DATE_FORMATTER);
+    }
+
+    @Override
+    public int compareTo(Week otherWeek) {
+        return days.first().getDayDate().compareTo(otherWeek.days.first().getDayDate());
     }
 }
