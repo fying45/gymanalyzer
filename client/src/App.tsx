@@ -1,16 +1,8 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import { useFetchData } from "./hooks/useFetchData";
-import { useDate } from "./hooks/useFormatDate";
 import { UploadCsvForm } from "./components/UploadGymBookForm";
-
-type VolumeByWeek = {
-  startDate: Date;
-  endDate: Date;
-  value: number;
-};
-
-const ALL_ORDER_BY = ["ASC", "DSC"] as const;
-type OrderByEnum = (typeof ALL_ORDER_BY)[number];
+import { ALL_ORDER_BY, type OrderByEnum } from "./types/orderBy";
+import { TrainingVolume } from "./components/TrainingVolume";
 
 type FetchVolumeParams = {
   orderBy: OrderByEnum;
@@ -23,21 +15,6 @@ export const App = () => {
       orderBy,
     },
   });
-  const { formatDate, ddMMyyyStringToDate } = useDate();
-
-  const volumeByWeek: VolumeByWeek[] = useMemo(() => {
-    if (data) {
-      return Object.entries(data).map(([key, value]): VolumeByWeek => {
-        const [start, end] = key.split("-");
-        return {
-          startDate: ddMMyyyStringToDate(start),
-          endDate: ddMMyyyStringToDate(end),
-          value: value,
-        };
-      });
-    }
-    return [];
-  }, [data]);
 
   const handleChangeOrderBy: React.ChangeEventHandler<HTMLSelectElement> = useCallback((event) => {
     event.preventDefault();
@@ -45,15 +22,9 @@ export const App = () => {
     refetch();
   }, []);
 
-  if (loading) {
-    return <div>Data is loading </div>;
-  }
-
   return (
     <div>
       <UploadCsvForm onSubmit={refetch} />
-      <h2>Volume</h2>
-      <div>Total weeks : {volumeByWeek.length} </div>
       <form>
         <label>
           Tri :
@@ -64,13 +35,8 @@ export const App = () => {
           </select>
         </label>
       </form>
-      <div>
-        {volumeByWeek.map(({ startDate, endDate, value }) => (
-          <div key={startDate.toISOString().concat(endDate.toISOString())}>
-            {formatDate(startDate)} - {formatDate(endDate)} : {value}
-          </div>
-        ))}
-      </div>
+      <h2>Volume</h2>
+      {loading ? <div>Data is loading </div> : <TrainingVolume data={data!} refetch={refetch} />}
     </div>
   );
 };
