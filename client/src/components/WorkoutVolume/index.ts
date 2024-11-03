@@ -1,0 +1,1 @@
+export { TrainingVolume } from "./WorkoutVolume";

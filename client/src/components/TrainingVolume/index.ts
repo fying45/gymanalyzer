@@ -1,1 +1,0 @@
-export { TrainingVolume } from "./TrainingVolume";

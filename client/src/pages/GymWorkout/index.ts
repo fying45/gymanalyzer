@@ -1,0 +1,1 @@
+export { GymWorkout } from "./GymWorkout";
