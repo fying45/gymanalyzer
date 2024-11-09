@@ -1,11 +1,14 @@
-import { GymWorkout } from "./pages/GymWorkout/GymWorkout";
+import { GymWorkout } from "./components/GymWorkout/GymWorkout";
 import { Header } from "./pages/Header";
+import { PageLayout } from "./pages/PageLayout";
 
 export const App = () => {
   return (
     <>
       <Header />
-      <GymWorkout />
+      <PageLayout>
+        <GymWorkout />
+      </PageLayout>
     </>
   );
 };

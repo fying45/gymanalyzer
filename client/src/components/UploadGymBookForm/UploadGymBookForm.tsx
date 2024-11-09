@@ -47,7 +47,10 @@ export const UploadCsvForm = ({ onSubmit }: UploadCsvFormProps) => {
 
     fetch(API_URL.UPLOAD_GYMBOOK_LOG, options).then((response) => {
       if (response.ok) {
-        onSubmit && onSubmit();
+        if (onSubmit) {
+          onSubmit();
+        }
+
         handleResetFile();
       } else {
         throw new Error(`Failed to upload file:, ${response.statusText}`);

@@ -1,4 +1,4 @@
-import { ALL_ORDER_BY, OrderByEnum } from "../../types/orderBy";
+import { ALL_ORDER_BY, OrderByEnum } from "../../../types/orderBy";
 
 type SelectOrderByProps = {
   value: OrderByEnum;
